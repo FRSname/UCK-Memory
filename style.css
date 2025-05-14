@@ -18,14 +18,14 @@ h1 {
 
 #game-board {
   display: grid;
-  grid-template-columns: repeat(8, 85px);
+  grid-template-columns: repeat(8, 150px);
   grid-gap: 5px;
   justify-content: center;
 }
 
 .card {
-  width: 85px;
-  height: 85px;
+  width: 150px;
+  height: 150px;
   background-color: #ccc;
   cursor: pointer;
   position: relative;
