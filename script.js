@@ -1,8 +1,8 @@
 
 let cardPaths = [];
 for (let i = 1; i <= 36; i++) {
-  cardPaths.push(`images/pair${i}_a.png`);
-  cardPaths.push(`images/pair${i}_b.png`);
+  cardPaths.push(`./images/pair${i}_a.png`);
+  cardPaths.push(`./images/pair${i}_b.png`);
 }
 
 let flipped = [];
