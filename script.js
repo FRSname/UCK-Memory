@@ -2,6 +2,7 @@ const gameContainer = document.getElementById('game');
 const movesDisplay = document.getElementById('moves');
 const timerDisplay = document.getElementById('timer');
 const restartBtn = document.getElementById('restart');
+const scoreBody = document.getElementById('score-body');
 
 let flipped = [];
 let lockBoard = false;
@@ -9,6 +10,7 @@ let matchedCount = 0;
 let moves = 0;
 let timer = 0;
 let timerInterval = null;
+let playerName = '';
 
 function startTimer() {
   timer = 0;
@@ -28,34 +30,19 @@ function updateMoves() {
   movesDisplay.textContent = `Moves: ${moves}`;
 }
 
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
-
-function createCard(src) {
+function createCard(image) {
   const card = document.createElement('div');
   card.className = 'card';
+  card.dataset.image = image;
 
-  const inner = document.createElement('div');
-  inner.className = 'card-inner';
+  card.innerHTML = `
+    <div class="card-inner">
+      <div class="card-front" style="background-image: url('images/${image}')"></div>
+      <div class="card-back"></div>
+    </div>
+  `;
 
-  const front = document.createElement('div');
-  front.className = 'card-front';
-  front.style.backgroundImage = `url('./images/${src}')`;
-
-  const back = document.createElement('div');
-  back.className = 'card-back';
-
-  inner.appendChild(front);
-  inner.appendChild(back);
-  card.appendChild(inner);
-
-  card.dataset.image = src;
-
-  card.addEventListener('click', () => flipCard(card));
+card.addEventListener('click', () => flipCard(card));
 
   return card;
 }
@@ -99,7 +86,13 @@ function flipCard(card) {
 }
 
 function initGame() {
-  // Clear board and reset stats
+  if (!playerName) {
+    playerName = prompt("Enter your nickname:");
+    if (!playerName || playerName.trim() === "") {
+      playerName = "Player";
+    }
+  }
+
   gameContainer.innerHTML = '';
   moves = 0;
   matchedCount = 0;
@@ -109,25 +102,36 @@ function initGame() {
   timerDisplay.textContent = 'Time: 0s';
   stopTimer();
 
-  // Prepare card image names
-  const cardPaths = [];
+  const images = [];
   for (let i = 1; i <= 36; i++) {
-    cardPaths.push(`pair${i}_a.png`);
-    cardPaths.push(`pair${i}_b.png`);
+    images.push(`pair${i}_a.png`);
+    images.push(`pair${i}_b.png`);
   }
 
-  shuffle(cardPaths);
+  // Shuffle
+  for (let i = images.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [images[i], images[j]] = [images[j], images[i]];
+  }
 
-  // Create and append cards
-  cardPaths.forEach(src => {
-    const card = createCard(src);
-    gameContainer.appendChild(card);
+  images.forEach(img => {
+    gameContainer.appendChild(createCard(img));
   });
 
   startTimer();
 }
 
+function showScoreboard() {
+  const allScores = JSON.parse(localStorage.getItem('pexesoScores') || '[]');
+  scoreBody.innerHTML = '';
+  allScores.forEach(score => {
+    const row = document.createElement('tr');
+    row.innerHTML = `<td>${score.name}</td><td>${score.moves}</td><td>${score.time}</td>`;
+    scoreBody.appendChild(row);
+  });
+}
+
 restartBtn.addEventListener('click', initGame);
 
-// Start game initially
 initGame();
+showScoreboard();
