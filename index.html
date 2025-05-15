@@ -2,18 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pexeso Game</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>#UCK25 Memory Game</h1>
-  <div class="stats">
+
+  <h1>Pexeso</h1>
+
+  <div id="controls">
     <span id="moves">Moves: 0</span>
     <span id="timer">Time: 0s</span>
-    <button onclick="restartGame()">Restart</button>
+    <button id="restart">Restart</button>
   </div>
-  <div id="game-board"></div>
+
+  <div id="game"></div>
+
   <script src="script.js"></script>
 </body>
 </html>
